@@ -25,3 +25,7 @@ type Message {
   messageDate: String
   messageUser: User!
 }
+
+type Query {
+  _dummy: String
+}

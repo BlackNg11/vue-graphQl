@@ -3,7 +3,9 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 const filePath = path.join(__dirname, "typeDefs.gql");
+const typeDefs = fs.readFileSync(filePath, "utf-8");
 
+console.log(typeDefs);
 require("dotenv");
 
 const User = require("./models/User");
@@ -16,8 +18,6 @@ mongoose
   )
   .then(() => console.log("DB connected"))
   .catch((err) => console.error(err));
-
-const typeDefs = fs.readFileSync(filePath, "utf-8");
 
 const server = new ApolloServer({
   typeDefs,
