@@ -1,41 +1,30 @@
 const { ApolloServer, gql } = require("apollo-server");
+const mongoose = require("mongoose");
+const fs = require("fs");
+const path = require("path");
+const filePath = path.join(__dirname, "typeDefs.gql");
 
-const todos = [
-  { task: "Wash car", completed: false },
-  { task: "Clean room", completed: true }
-];
+require("dotenv");
 
-const typeDefs = gql`
-  type Todo {
-    task: String
-    completed: Boolean
-  }
+const User = require("./models/User");
+const Post = require("./models/Post");
 
-  type Query {
-    getTodos: [Todo]
-  }
+mongoose
+  .connect(
+    "mongodb+srv://black:black@cluster0.jhphl.mongodb.net/Vue?retryWrites=true&w=majority",
+    { useNewUrlParser: true }
+  )
+  .then(() => console.log("DB connected"))
+  .catch((err) => console.error(err));
 
-  type Mutation {
-    addTodo(task: String, completed: Boolean): Todo
-  }
-`;
-
-const resolvers = {
-  Query: {
-    getTodos: () => todos
-  },
-  Mutation: {
-    addTodo: (_, { task, completed }) => {
-      const todo = { task, completed };
-      todos.push(todo);
-      return todo;
-    }
-  }
-};
+const typeDefs = fs.readFileSync(filePath, "utf-8");
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  context: {
+    User,
+    Post,
+  },
 });
 
 server.listen().then(({ url }) => {
