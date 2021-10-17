@@ -5,8 +5,6 @@ const path = require("path");
 const filePath = path.join(__dirname, "typeDefs.gql");
 const typeDefs = fs.readFileSync(filePath, "utf-8");
 
-console.log(typeDefs);
-require("dotenv");
 
 const User = require("./models/User");
 const Post = require("./models/Post");
