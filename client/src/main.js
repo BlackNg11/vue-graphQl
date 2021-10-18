@@ -11,8 +11,8 @@ import VueApollo from "vue-apollo";
 Vue.use(VueApollo);
 
 // Setup ApolloClient
-const defaultClient = new ApolloClient({
-  uri: "http://localhost:4000/graphql"
+export const defaultClient = new ApolloClient({
+  uri: "http://localhost:4000/graphql",
 });
 
 const apolloProvider = new VueApollo({ defaultClient });
@@ -23,5 +23,5 @@ new Vue({
   provide: apolloProvider.provide(),
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
