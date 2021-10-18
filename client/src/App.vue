@@ -66,7 +66,7 @@ export default {
   name: "App",
   data() {
     return {
-      sideNav: false,
+      sideNav: false
     };
   },
   computed: {
@@ -74,22 +74,22 @@ export default {
       return [
         { icon: "chat", title: "Posts", link: "/posts" },
         { icon: "lock_open", title: "Sign In", link: "/signin" },
-        { icon: "create", title: "Sign Up", link: "/signup" },
+        { icon: "create", title: "Sign Up", link: "/signup" }
       ];
     },
     sideNavItems() {
       return [
         { icon: "chat", title: "Posts", link: "/posts" },
         { icon: "lock_open", title: "Sign In", link: "/signin" },
-        { icon: "create", title: "Sign Up", link: "/signup" },
+        { icon: "create", title: "Sign Up", link: "/signup" }
       ];
-    },
+    }
   },
   methods: {
     toggleSideNav() {
       this.sideNav = !this.sideNav;
-    },
-  },
+    }
+  }
 };
 </script>
 
