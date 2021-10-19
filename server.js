@@ -22,7 +22,7 @@ mongoose
 const getUser = async (token) => {
   if (token) {
     try {
-      let user = await jwt.verify(token, "Test");
+      return await jwt.verify(token, "Test");
     } catch (err) {
       throw new AuthenticationError("Please signin again");
     }

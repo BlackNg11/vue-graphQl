@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Signin",
   data() {
@@ -53,6 +55,16 @@ export default {
       username: "",
       password: "",
     };
+  },
+  computer: {
+    ...mapGetters(["user"]),
+  },
+  watch: {
+    user(value) {
+      if (value) {
+        this.$router.push("/");
+      }
+    },
   },
   methods: {
     handleSigninUser() {
