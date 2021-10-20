@@ -25,6 +25,8 @@ const PostSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  // property ('createdBy') === path
+  // ref ('User') === model
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -47,6 +49,11 @@ const PostSchema = new mongoose.Schema({
       },
     },
   ],
+});
+
+// Create index to search on all fields of posts
+PostSchema.index({
+  "$**": "text",
 });
 
 module.exports = mongoose.model("Post", PostSchema);
