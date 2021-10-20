@@ -80,11 +80,12 @@ export default new Vuex.Store({
           mutation: ADD_POST,
           variables: payload,
           update: (cache, { data: { addPost } }) => {
-            // First read the query want to update
+            // First read the query you want to update
             const data = cache.readQuery({ query: GET_POSTS });
             // Create updated data
             data.getPosts.unshift(addPost);
             // Write updated data back to query
+            console.log(data);
             cache.writeQuery({
               query: GET_POSTS,
               data,
@@ -161,6 +162,7 @@ export default new Vuex.Store({
   getters: {
     posts: (state) => state.posts,
     user: (state) => state.user,
+    userFavorites: (state) => state.user && state.user.favorites,
     loading: (state) => state.loading,
     error: (state) => state.error,
     authError: (state) => state.authError,
