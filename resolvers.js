@@ -13,32 +13,30 @@ module.exports = {
         return null;
       }
       const user = await User.findOne({
-        username: currentUser.username
+        username: currentUser.username,
       }).populate({
         path: "favorites",
-        model: "Post"
+        model: "Post",
       });
       return user;
     },
     getPosts: async (_, args, { Post }) => {
-      const posts = await Post.find({})
-        .sort({ createdDate: "desc" })
-        .populate({
-          path: "createdBy",
-          model: "User"
-        });
+      const posts = await Post.find({}).sort({ createdDate: "desc" }).populate({
+        path: "createdBy",
+        model: "User",
+      });
       return posts;
     },
     getUserPosts: async (_, { userId }, { Post }) => {
       const posts = await Post.find({
-        createdBy: userId
+        createdBy: userId,
       });
       return posts;
     },
     getPost: async (_, { postId }, { Post }) => {
       const post = await Post.findOne({ _id: postId }).populate({
         path: "messages.messageUser",
-        model: "User"
+        model: "User",
       });
       return post;
     },
@@ -53,7 +51,7 @@ module.exports = {
         )
           .sort({
             score: { $meta: "textScore" },
-            likes: "desc"
+            likes: "desc",
           })
           .limit(5);
         return searchResults;
@@ -66,7 +64,7 @@ module.exports = {
           .sort({ createdDate: "desc" })
           .populate({
             path: "createdBy",
-            model: "User"
+            model: "User",
           })
           .limit(pageSize);
       } else {
@@ -76,7 +74,7 @@ module.exports = {
           .sort({ createdDate: "desc" })
           .populate({
             path: "createdBy",
-            model: "User"
+            model: "User",
           })
           .skip(skips)
           .limit(pageSize);
@@ -84,7 +82,7 @@ module.exports = {
       const totalDocs = await Post.countDocuments();
       const hasMore = totalDocs > pageSize * pageNum;
       return { posts, hasMore };
-    }
+    },
   },
   Mutation: {
     addPost: async (
@@ -97,14 +95,31 @@ module.exports = {
         imageUrl,
         categories,
         description,
-        createdBy: creatorId
+        createdBy: creatorId,
       }).save();
       return newPost;
+    },
+    updateUserPost: async (
+      _,
+      { postId, userId, title, imageUrl, categories, description },
+      { Post }
+    ) => {
+      const post = await Post.findOneAndUpdate(
+        // Find post by postId and createdBy
+        { _id: postId, createdBy: userId },
+        { $set: { title, imageUrl, categories, description } },
+        { new: true }
+      );
+      return post;
+    },
+    deleteUserPost: async (_, { postId }, { Post }) => {
+      const post = await Post.findOneAndRemove({ _id: postId });
+      return post;
     },
     addPostMessage: async (_, { messageBody, userId, postId }, { Post }) => {
       const newMessage = {
         messageBody,
-        messageUser: userId
+        messageUser: userId,
       };
       const post = await Post.findOneAndUpdate(
         // find post by id
@@ -115,7 +130,7 @@ module.exports = {
         { new: true }
       ).populate({
         path: "messages.messageUser",
-        model: "User"
+        model: "User",
       });
       return post.messages[0];
     },
@@ -133,7 +148,7 @@ module.exports = {
         { new: true }
       ).populate({
         path: "favorites",
-        model: "Post"
+        model: "Post",
       });
       // Return only likes from 'post' and favorites from 'user'
       return { likes: post.likes, favorites: user.favorites };
@@ -152,7 +167,7 @@ module.exports = {
         { new: true }
       ).populate({
         path: "favorites",
-        model: "Post"
+        model: "Post",
       });
       // Return only likes from 'post' and favorites from 'user'
       return { likes: post.likes, favorites: user.favorites };
@@ -176,9 +191,9 @@ module.exports = {
       const newUser = await new User({
         username,
         email,
-        password
+        password,
       }).save();
       return { token: createToken(newUser, process.env.SECRET, "1hr") };
-    }
-  }
+    },
+  },
 };
